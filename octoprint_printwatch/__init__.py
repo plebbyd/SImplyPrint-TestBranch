@@ -214,7 +214,7 @@ class PrintWatchPlugin(octoprint.plugin.StartupPlugin,
                     self._logger.info(self.samples.rows_of_data)
                     
                     resp = requests.get('http://10.0.0.186:5000/', data=json.dumps({'data' : self.samples.rows_of_data}).encode('utf8'))
-                    print(resp.json())
+                    self._logger.info(resp.json())
 
             sleep(0.1)
     def on_event(self, event, payload):
