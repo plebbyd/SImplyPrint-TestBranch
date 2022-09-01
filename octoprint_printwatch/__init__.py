@@ -5,7 +5,7 @@ from .videostreamer import VideoStreamer
 from .comm import CommManager
 from .inferencer import Inferencer
 from .printer import PrinterControl
-import numpy as np
+
 from enum import Enum
 from threading import Thread
 from time import time, sleep
@@ -32,18 +32,18 @@ class BadRowException(Exception):
 
 class AnomalyFeatures():
     def __init__(self):
-        self.rows_of_data = np.zeros([1,22]) #N=25 features at the moment
+        self.rows_of_data = [] #N=22 features at the moment
 
     def append_row(self, row : list):
         if isinstance(row, list):
-            self.rows_of_data = np.vstack([self.rows_of_data, row])
+            self.rows_of_data.append(row)
         else:
             raise BadRowException('row must be of type <list> and size=26')
 
     def retrieve_row(self, idx : int = -1) -> list:
-        return self.rows_of_data[idx].tolist()
+        return self.rows_of_data[idx]
 
-    def retrieve_all_data(self) -> np.ndarray:
+    def retrieve_all_data(self) -> list:
         return self.rows_of_data
 
 
@@ -210,7 +210,7 @@ class PrintWatchPlugin(octoprint.plugin.StartupPlugin,
                 if self.samples.rows_of_data.shape[0] > 500:
                     self._logger.info(self.samples.rows_of_data)
                     with open('output_file.txt', 'w+') as f:
-                        for line in self.samples.rows_of_data.tolist():
+                        for line in self.samples.rows_of_data:
                             f.write("%s\n" % str(line).replace('[', '').replace(']', ''))
 
             sleep(0.1)
