@@ -1,46 +1,49 @@
 # coding=utf-8
 
 ########################################################################################################################
+### Do not forget to adjust the following variables to your own plugin.
 
 # The plugin's identifier, has to be unique
-plugin_identifier = "SimplyPrint"
+plugin_identifier = "printwatch"
 
 # The plugin's python package, should be "octoprint_<plugin identifier>", has to be unique
-plugin_package = "octoprint_simplyprint"
+plugin_package = "octoprint_printwatch"
 
 # The plugin's human readable name. Can be overwritten within OctoPrint's internal data via __plugin_name__ in the
 # plugin module
-plugin_name = "SimplyPrint"
+plugin_name = "OctoPrint-Printwatch"
 
 # The plugin's version. Can be overwritten within OctoPrint's internal data via __plugin_version__ in the plugin module
-# Remember to bump the version in octoprint_simplyprint/__init__.py as well
-plugin_version = "4.0.0"
+plugin_version = "1.1.1"
 
 # The plugin's description. Can be overwritten within OctoPrint's internal data via __plugin_description__ in the plugin
 # module
-plugin_description = "3D print online anywhere from (probably) the most user friendly all-in-one platform there is, from your computer or phone."
+plugin_description = "PrintWatch monitors your prints for defects in real-time and optimizes your 3D printers using Artificial Intelligence"
 
 # The plugin's author. Can be overwritten within OctoPrint's internal data via __plugin_author__ in the plugin module
-plugin_author = "SimplyPrint"
+plugin_author = "printpal.io"
 
 # The plugin's author's mail address.
-plugin_author_email = "albert@simplyprint.io"
+plugin_author_email = "lebiedzinskip@printpal.io"
 
 # The plugin's homepage URL. Can be overwritten within OctoPrint's internal data via __plugin_url__ in the plugin module
-plugin_url = "https://simplyprint.io/"
+plugin_url = "https://github.com/printpal-io/OctoPrint-PrintWatch"
 
 # The plugin's license. Can be overwritten within OctoPrint's internal data via __plugin_license__ in the plugin module
 plugin_license = "AGPLv3"
 
 # Any additional requirements besides OctoPrint should be listed here
-plugin_requires = ["requests", "python-crontab", "distro"]
+plugin_requires = ["pillow >=6.2.0<7.0.0", "numpy"]
+
 
 ### --------------------------------------------------------------------------------------------------------------------
 ### More advanced options that you usually shouldn't have to touch follow after this point
 ### --------------------------------------------------------------------------------------------------------------------
 
 # Additional package data to install for this plugin. The subfolders "templates", "static" and "translations" will
-# already be installed automatically if they exist.
+# already be installed automatically if they exist. Note that if you add something here you'll also need to update
+# MANIFEST.in to match to ensure that python setup.py sdist produces a source distribution that contains all your
+# files. This is sadly due to how python's setup.py works, see also http://stackoverflow.com/a/14159430/2028598
 plugin_additional_data = []
 
 # Any additional python packages you need to install with your plugin that are not contained in <plugin_package>.*
@@ -66,33 +69,12 @@ from setuptools import setup
 try:
     import octoprint_setuptools
 except:
-    print("Could not import OctoPrint's setuptools, are you sure you are running that under "
-          "the same python installation that OctoPrint is installed under?")
+    print(
+        "Could not import OctoPrint's setuptools, are you sure you are running that under "
+        "the same python installation that OctoPrint is installed under?"
+    )
     import sys
 
-    sys.exit(-1)
-
-
-###########################################
-# SIMPLYPRINT OCTOPRINT VERSION CHECK     #
-# SimplyPrint is only working with 1.3.12 #
-# Older versions need to update           #
-###########################################
-try:
-    from octoprint.util.version import is_octoprint_compatible
-except ImportError:
-    print("Could not find OctoPrint, are you sure you are installing under the same python installation"
-          "that OctoPrint is installed under?")
-    import sys
-    sys.exit(-1)
-
-if not is_octoprint_compatible(">=1.3.12"):
-    print("\n\n----------------------------------------\n\n")
-    print("!! Unsupported OctoPrint version !!\n")
-    print("SimplyPrint requires at least OctoPrint 1.3.12 to work properly, please update your OctoPrint install\n")
-    print("You can find out more about that here: http://simplyprint.io/redir?r=unsupported-octoprint")
-    print("\n")
-    import sys
     sys.exit(-1)
 
 
@@ -109,7 +91,7 @@ setup_parameters = octoprint_setuptools.create_plugin_setup_parameters(
     requires=plugin_requires,
     additional_packages=plugin_additional_packages,
     ignored_packages=plugin_ignored_packages,
-    additional_data=plugin_additional_data
+    additional_data=plugin_additional_data,
 )
 
 if len(additional_setup_parameters):
