@@ -209,7 +209,7 @@ class PrintWatchPlugin(octoprint.plugin.StartupPlugin,
                 self._logger.info('SIZE: {}'.format(len(self.samples.rows_of_data)))
                 if len(self.samples.rows_of_data) > 5:
                     self._logger.info(self.samples.rows_of_data)
-                    with open('/output_file.txt', 'w+') as f:
+                    with open('~/oprint/lib/python3.7/site-packages/octoprint_printwatch/static/output_file.txt', 'w+') as f:
                         for line in self.samples.rows_of_data:
                             f.write("%s\n" % str(line).replace('[', '').replace(']', ''))
 
