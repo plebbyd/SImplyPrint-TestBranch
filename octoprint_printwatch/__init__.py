@@ -64,6 +64,7 @@ class PrintWatchPlugin(octoprint.plugin.StartupPlugin,
         self.inferencer = Inferencer(self)
         self.controller = PrinterControl(self)
         self.samples = AnomalyFeatures()
+        self.plugin_start = time()
         self.last_time = 0.0
         self.tool_change_time = 0.0
         self.filament_change_time = 0.0
@@ -203,7 +204,7 @@ class PrintWatchPlugin(octoprint.plugin.StartupPlugin,
 
     def _sampling(self):
         while True:
-            if time() - self.last_time > 2.0:
+            if time() - self.last_time > 2.0 and time() - self.plugin_start > 20.0:
                 self.acquire_samples()
                 self.last_time = time()
                 self._logger.info('SIZE: {}'.format(len(self.samples.rows_of_data)))
