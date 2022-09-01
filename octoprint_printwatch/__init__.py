@@ -206,8 +206,8 @@ class PrintWatchPlugin(octoprint.plugin.StartupPlugin,
             if time() - self.last_time > 2.0:
                 self.acquire_samples()
                 self.last_time = time()
-                self._logger.info('SIZE: {}'.format(self.samples.rows_of_data.shape[0]))
-                if self.samples.rows_of_data.shape[0] > 500:
+                self._logger.info('SIZE: {}'.format(len(self.samples.rows_of_data)))
+                if len(self.samples.rows_of_data) > 5:
                     self._logger.info(self.samples.rows_of_data)
                     with open('output_file.txt', 'w+') as f:
                         for line in self.samples.rows_of_data:
