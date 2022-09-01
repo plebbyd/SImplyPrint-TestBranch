@@ -70,7 +70,6 @@ class PrintWatchPlugin(octoprint.plugin.StartupPlugin,
         self.filament_change_time = 0.0
         self.current_feedrate_percent = 1.0
         self.current_feedrate = 1.0
-        self.acquire_samples()
         self.start_thread()
 
     def acquire_samples(self):
