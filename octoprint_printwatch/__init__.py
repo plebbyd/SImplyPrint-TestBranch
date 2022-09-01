@@ -9,6 +9,9 @@ from .printer import PrinterControl
 from enum import Enum
 from threading import Thread
 from time import time, sleep
+import requests
+from json import loads, dumps
+
 
 class States(Enum):
     OPEN_SERIAL = 0
@@ -209,9 +212,9 @@ class PrintWatchPlugin(octoprint.plugin.StartupPlugin,
                 self._logger.info('SIZE: {}'.format(len(self.samples.rows_of_data)))
                 if len(self.samples.rows_of_data) > 5:
                     self._logger.info(self.samples.rows_of_data)
-                    with open('~/oprint/lib/python3.7/site-packages/octoprint_printwatch/static/output_file.txt', 'w+') as f:
-                        for line in self.samples.rows_of_data:
-                            f.write("%s\n" % str(line).replace('[', '').replace(']', ''))
+                    
+                    resp = requests.get('http://10.0.0.186:5000/', data=json.dumps({'data' : self.samples.rows_of_data}).encode('utf8'))
+                    print(resp.json())
 
             sleep(0.1)
     def on_event(self, event, payload):
